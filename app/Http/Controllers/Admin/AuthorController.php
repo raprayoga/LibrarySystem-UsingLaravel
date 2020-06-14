@@ -15,7 +15,9 @@ class AuthorController extends Controller
      */
     public function index()
     {
-        return view('admin.author.index');
+        return view('admin.author.index', [
+            'title' => "Data Penulis"
+        ]);
     }
 
     /**
@@ -25,7 +27,9 @@ class AuthorController extends Controller
      */
     public function create()
     {
-        return view('admin.author.create');
+        return view('admin.author.create', [
+            'title' => "Tambah Penulis"
+        ]);
     }
 
     /**
@@ -36,9 +40,14 @@ class AuthorController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'name' => 'required|min:3'
+        ]);
+
         Author::create($request->only('name'));
 
-        return redirect()->route('admin.author.index');
+        return redirect()->route('admin.author.index')
+                    ->with('success', 'Data penulis berhasil ditambahkan');
     }
 
     /**
@@ -62,6 +71,7 @@ class AuthorController extends Controller
     {
         return view('admin.author.edit', [
             'author' => $author,
+            'title' => 'Ubah Penulis'
         ]);
     }
 
@@ -74,9 +84,14 @@ class AuthorController extends Controller
      */
     public function update(Request $request, Author $author)
     {
+        $this->validate($request, [
+            'name' => 'required|min:3'
+        ]);
+
         $author->update($request->only('name'));
 
-        return redirect()->route('admin.author.index');
+        return redirect()->route('admin.author.index')
+                    ->with('info', 'Data penulis berhasil diperbaharui');
     }
 
     /**
@@ -85,8 +100,11 @@ class AuthorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Author $author)
     {
-        //
+        $author->delete();
+
+        return redirect()->route('admin.author.index')
+                    ->with('secondary', 'Data penulis berhasil dihapus');
     }
 }

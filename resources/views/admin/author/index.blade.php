@@ -18,9 +18,17 @@
     </table>
   </div>
 </div>
+
+<form action="" method="post" id="deleteForm">
+  @csrf
+  @method("DELETE")
+  <input type="submit" value="Hapus" style="display: none"> 
+</form>
 @endsection
 
 @push('scripts')
+  <script src="{{ asset('assets/plugins/bs-notify.min.js') }}"></script>
+  @include('admin.templates.partials.alerts')
   <script>
     $(function() {
       $('#dataTable').DataTable({
